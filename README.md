@@ -1,4 +1,4 @@
-# paper-range-slider - v0.1.1
+# paper-range-slider - v0.1.2
 
 `paper-range-slider` allows the user to select a range of values within a given (possibly wider) range. values are selected by moving the position of two knobs, or by dragging the selected range of values within the allowed limits. [A demo is provided here](http://IftachSadeh.github.io/paper-range-slider/components/paper-range-slider/demo/). The code was developed using Polymer v1.4.0.
 
@@ -42,7 +42,7 @@ or add the following to your `bower.json`:
 </script>
 ```
 
-- One can programmatically set the selected range by e.g., 
+- One can programmatically set the selected range by e.g.,
 ```javascript
 window.addEventListener('WebComponentsReady', function(e) {
     var myMin = 10, myMax = 90;

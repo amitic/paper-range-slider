@@ -1,5 +1,9 @@
 # Changelog
 
+## paper-range-slider 0.1.2 (25/08/2016)
+
+- Changed the default values for `valueDiffMin` and `valueDiffMax` to 0 to prevent overlapping.
+
 ## paper-range-slider 0.1.1 (21/06/2016)
 
 - Modified the `_setValueDiff()` function. The `valueDiffMin` and `valueDiffMax` values are now not set by default (which is equivalent to setting either to a negative value). If they remain unset, they are ignored.

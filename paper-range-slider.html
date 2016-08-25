@@ -232,7 +232,7 @@ See README.md for further details.
             // set the padding for the parent container
             this.setPadding();
 
-            // setup listeners for updating everything whenever a knob is affected 
+            // setup listeners for updating everything whenever a knob is affected
             var this_ = this;
 
             this.$.sliderMin.addEventListener('immediate-value-change', function(customEvent) {
@@ -241,7 +241,7 @@ See README.md for further details.
                 this_.$.sliderMin._expandKnob();
                 this_.$.sliderMax._expandKnob();
             });
-            
+
             this.$.sliderMax.addEventListener('immediate-value-change', function(customEvent) {
                 // console.log('immed-change..',this.immediateValue,this_.valueMax)
                 this_._setValueMinMax(this_._getValuesMinMax(null,this.immediateValue));
@@ -254,7 +254,7 @@ See README.md for further details.
                     this_.$.sliderMin._expandKnob();
                 }
             });
-        
+
             this.$.sliderMax.addEventListener('change', function(customEvent) {
                 // console.log('final-change..',this.immediateValue,this_.valueMax)
                 this_._setValueMinMax(this_._getValuesMinMax(null,this.immediateValue));
@@ -293,9 +293,9 @@ See README.md for further details.
         // the this._valueDiffMin can not be larger than this._valueDiffMax
         _setValueDiff: function() {
 
-            this._valueDiffMax = (this.valueDiffMax > 0) ? this.valueDiffMax : -1;
-            this._valueDiffMin = (this.valueDiffMin > 0) ? this.valueDiffMin : -1;
-            
+            this._valueDiffMax = (this.valueDiffMax > 0) ? this.valueDiffMax : 0;
+            this._valueDiffMin = (this.valueDiffMin > 0) ? this.valueDiffMin : 0;
+
             return;
         },
 
@@ -349,7 +349,7 @@ See README.md for further details.
             value = Math.max(value, this.min);
             this.$.sliderMin.value = value;
             this.valueMin          = value;
-            
+
             return;
         },
 
@@ -380,7 +380,7 @@ See README.md for further details.
         // spans the distance between the knobs
         _diffDivOnTrack: function(event) {
           event.stopPropagation();
-          
+
           switch (event.detail.state) {
             case 'start':
               this._trackStart(event);
@@ -414,14 +414,14 @@ See README.md for further details.
 
                 // setting of the div which spans the space between the two knobs
                 this._updateDiffDiv();
-                
+
                 // fire to indicate an update of this.valueMin and/or this.valueMax
                 this.updateValues();
             }
 
             return;
         },
-        
+
         // placeholder function for possible later implementation
         _trackEnd: function() { return; },
 
@@ -429,7 +429,7 @@ See README.md for further details.
         //      show/hide pins (if defined) for one knob, when the other knob is pressed
         _sliderMinDown: function() {
             this.$.sliderMax._expandKnob();
-            
+
             return;
         },
         _sliderMaxDown: function() {
@@ -440,13 +440,13 @@ See README.md for further details.
         _sliderMinUp: function() {
             if(this.alwaysShowPin) this.$.sliderMin._expandKnob();
             else                   this.$.sliderMax._resetKnob();
-            
+
             return;
         },
         _sliderMaxUp: function() {
             if(this.alwaysShowPin) this.$.sliderMax._expandKnob();
             else                   this.$.sliderMin._resetKnob();
-            
+
             return;
         },
 
@@ -461,7 +461,7 @@ See README.md for further details.
             this._xWidth = this.$.sliderMin.querySelector('#sliderBar').offsetWidth;
             this._x0_Min = this.$.sliderMin.ratio * this._xWidth;
             this._x0_Max = this.$.sliderMax.ratio * this._xWidth;
-            
+
             return;
         },
 
@@ -482,7 +482,7 @@ See README.md for further details.
         _updateDiffDiv: function() {
             return;
             // var dragAnywhere = true;
-            
+
             // // the dragg area is the entire width of the slider
             // if(dragAnywhere) {
             //     var width  = Number((this.sliderWidth).replace('px',''));
@@ -525,7 +525,7 @@ See README.md for further details.
             this.$.sliderMax.pin              = this.pin
             this.$.sliderMin.snaps            = this.snaps
             this.$.sliderMax.snaps            = this.snaps
-            
+
             // this.$.sliderMin.style.width      = this.sliderWidth
             // this.$.sliderMax.style.width      = this.sliderWidth
             // this.$.sliderMin.style.marginLeft = ("-"+this.sliderWidth)
@@ -599,7 +599,7 @@ See README.md for further details.
                 this.async(function() { this.fire('updateValues'); });
             }
             return;
-        },        
+        },
 
         /**
          * set the minimal value (lower range) of the slider
