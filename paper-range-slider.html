@@ -88,11 +88,11 @@ See README.md for further details.
           </div>
 
           <div style="position:absolute; width:100%; display:block; top:0px; pointer-events: none;">
-            <paper-slider id='sliderMax' on-down="_sliderMaxDown" on-up="_sliderMaxUp" step="[[step]]" min="[[min]]" max="[[max]]" value="[[valueMax]]" secondary-progress='[[max]]' style="width:100%;"></paper-slider>
+            <paper-slider id='sliderMax' on-down="_sliderMaxDown" on-up="_sliderMaxUp" step="[[step]]" min="[[min]]" max="[[max]]" value="[[valueMax]]" secondary-progress='[[max]]' style="width:100%;" focused="{{_focuses.maxSlider}}"></paper-slider>
           </div>
 
           <div style="position:absolute; width:100%; display:block; top:0px; pointer-events: none;">
-            <paper-slider id='sliderMin' on-down="_sliderMinDown" on-up="_sliderMinUp" noink step="[[step]]" min="[[min]]" max="[[max]]" value="[[valueMin]]" style="width:100%;"> </paper-slider>
+            <paper-slider id='sliderMin' on-down="_sliderMinDown" on-up="_sliderMinUp" noink step="[[step]]" min="[[min]]" max="[[max]]" value="[[valueMin]]" style="width:100%;" focused="{{_focuses.minSlider}}"> </paper-slider>
           </div>
           <!-- now add one real line -->
           <div id='diffDivInner' style="line-height:100%;"><br></div>
@@ -101,6 +101,7 @@ See README.md for further details.
     </template>
 
     <script>
+      /* jshint unused: false */
       Polymer({
         is: 'paper-range-slider',
 
@@ -114,7 +115,7 @@ See README.md for further details.
              */
             sliderWidth: {
                 type: String,
-                value: "",
+                value: '',
                 notify: true,
                 reflectToAttribute: true
             },
@@ -222,6 +223,23 @@ See README.md for further details.
               value: false,
               notify: true
             },
+
+            _focuses: {
+              type: Object,
+              value: function() {
+                return {
+                  'minSlider': false,
+                  'maxSlider': false
+                };
+              }
+            },
+
+            focused: {
+              type: Boolean,
+              notify: true,
+              reflectToAttribute: true,
+              computed: '_computeFocus(_focuses.*)'
+            }
         },
 
         // initial settings
@@ -275,14 +293,14 @@ See README.md for further details.
             // the creation of the element can never be trusted to derive the offsetHeight
             // (if e.g., it is in a collapsed container). We therefore add a fake element to the
             // DOM to get the basic text-heigh, then we remove this element.
-            var beforeEle = document.createElement("div");
-            beforeEle.setAttribute("style","position:absolute; top:0px; opacity:0;");
-            beforeEle.innerHTML = "invisibleText"; // must have some content
+            var beforeEle = document.createElement('div');
+            beforeEle.setAttribute('style','position:absolute; top:0px; opacity:0;');
+            beforeEle.innerHTML = 'invisibleText'; // must have some content
             document.body.insertBefore(beforeEle, document.body.children[0]);
             var height = beforeEle.offsetHeight / 2;  //console.log( 'qqq',beforeEle.offsetHeight)
 
-            this.style.paddingTop    = height+"px"
-            this.style.paddingBottom = height+"px"
+            this.style.paddingTop    = height + 'px';
+            this.style.paddingBottom = height + 'px';
 
             beforeEle.remove();
             return;
@@ -301,16 +319,16 @@ See README.md for further details.
 
         // get a new set of min/max values, following predefined rules for overlap of the two
         _getValuesMinMax: function(valueMin,valueMax) {
-            var hasMin = (valueMin != null && valueMin >= this.min && valueMin <= this.max);
-            var hasMax = (valueMax != null && valueMax >= this.min && valueMax <= this.max);
+            var hasMin = (valueMin !== null && valueMin >= this.min && valueMin <= this.max);
+            var hasMax = (valueMax !== null && valueMax >= this.min && valueMax <= this.max);
 
             if(!hasMin && !hasMax) { return [this.valueMin,this.valueMax]; }
 
             var valueNowMin = hasMin ? valueMin : this.valueMin;
             var valueNowMax = hasMax ? valueMax : this.valueMax;
 
-            valueNowMin = Math.min(Math.max(valueNowMin, this.min), this.max)
-            valueNowMax = Math.min(Math.max(valueNowMax, this.min), this.max)
+            valueNowMin = Math.min(Math.max(valueNowMin, this.min), this.max);
+            valueNowMax = Math.min(Math.max(valueNowMax, this.min), this.max);
 
             var diffNow  = valueNowMax - valueNowMin;
 
@@ -438,15 +456,19 @@ See README.md for further details.
             return;
         },
         _sliderMinUp: function() {
-            if(this.alwaysShowPin) this.$.sliderMin._expandKnob();
-            else                   this.$.sliderMax._resetKnob();
-
+            if (this.alwaysShowPin) {
+                this.$.sliderMin._expandKnob();
+            } else {
+                this.$.sliderMax._resetKnob();
+            }
             return;
         },
         _sliderMaxUp: function() {
-            if(this.alwaysShowPin) this.$.sliderMax._expandKnob();
-            else                   this.$.sliderMin._resetKnob();
-
+            if (this.alwaysShowPin) {
+                this.$.sliderMax._expandKnob();
+            } else {
+                this.$.sliderMin._resetKnob();
+            }
             return;
         },
 
@@ -521,30 +543,30 @@ See README.md for further details.
             if(this.alwaysShowPin) { this.pin = true; }
 
             // some basic properties
-            this.$.sliderMin.pin              = this.pin
-            this.$.sliderMax.pin              = this.pin
-            this.$.sliderMin.snaps            = this.snaps
-            this.$.sliderMax.snaps            = this.snaps
+            this.$.sliderMin.pin              = this.pin;
+            this.$.sliderMax.pin              = this.pin;
+            this.$.sliderMin.snaps            = this.snaps;
+            this.$.sliderMax.snaps            = this.snaps;
 
             // this.$.sliderMin.style.width      = this.sliderWidth
             // this.$.sliderMax.style.width      = this.sliderWidth
             // this.$.sliderMin.style.marginLeft = ("-"+this.sliderWidth)
-            if(this.sliderWidth != "") {
+            if(this.sliderWidth !== '') {
                 this.$.sliderOuterDiv.style.width = this.sliderWidth;
             }
 
             // disable some of the interface of the two single-sliders, but keep the knobs active
-            this.$.sliderMax.querySelector('#sliderContainer').style.pointerEvents = "none"
-            this.$.sliderMin.querySelector('#sliderContainer').style.pointerEvents = "none"
+            this.$.sliderMax.querySelector('#sliderContainer').style.pointerEvents = 'none';
+            this.$.sliderMin.querySelector('#sliderContainer').style.pointerEvents = 'none';
 
-            this.$.sliderMax.querySelector('#sliderKnobInner').style.pointerEvents = "auto"
-            this.$.sliderMin.querySelector('#sliderKnobInner').style.pointerEvents = "auto"
+            this.$.sliderMax.querySelector('#sliderKnobInner').style.pointerEvents = 'auto';
+            this.$.sliderMin.querySelector('#sliderKnobInner').style.pointerEvents = 'auto';
 
             // since the two single-sliders are overlaid, we need to remove forground color
-            this.$.sliderMin.querySelector('#sliderBar').querySelector('#progressContainer').style.background = "transparent";
+            this.$.sliderMin.querySelector('#sliderBar').querySelector('#progressContainer').style.background = 'transparent';
 
             // internal variable to prevent unneeded fire on updates
-            this._prevUpdateValues = [this.min, this.max]
+            this._prevUpdateValues = [this.min, this.max];
 
             // set internal variables to control the minimal and maximal difference between selected values
             this._setValueDiff();
@@ -571,13 +593,17 @@ See README.md for further details.
          */
         setValues: function(valueMin,valueMax) {
             // some sanity checks/changes
-            if(valueMin != null) {
-                if(valueMin < this.min || valueMin > this.max) valueMin = null;
+            if (valueMin !== null) {
+                if (valueMin < this.min || valueMin > this.max) {
+                    valueMin = null;
+                }
             }
-            if(valueMax != null) {
-                if(valueMax < this.min || valueMax > this.max) valueMax = null;
+            if (valueMax !== null) {
+                if (valueMax < this.min || valueMax > this.max) {
+                    valueMax = null;
+                }
             }
-            if(valueMin != null && valueMax != null) {
+            if (valueMin !== null && valueMax !== null) {
                 valueMin = Math.min(valueMin,valueMax);
             }
 
@@ -592,7 +618,7 @@ See README.md for further details.
          * @method updateValues
          */
         updateValues: function() {
-            if(this._prevUpdateValues[0] != this.valueMin || this._prevUpdateValues[1] != this.valueMax) {
+            if(this._prevUpdateValues[0] !== this.valueMin || this._prevUpdateValues[1] !== this.valueMax) {
                 this._prevUpdateValues = [this.valueMin, this.valueMax];
 
                 // fire the event
@@ -608,10 +634,12 @@ See README.md for further details.
         setMin: function(minIn) {
             // paper-slider needs a safety chek that the min value we are going to set is
             // not larger than the max value whic is already sey
-            if(this.max < minIn) this.max = minIn;
+            if (this.max < minIn) {
+                this.max = minIn;
+            }
 
             this.min = minIn;
-            this._prevUpdateValues = [this.min, this.max]
+            this._prevUpdateValues = [this.min, this.max];
             return;
         },
         /**
@@ -621,10 +649,12 @@ See README.md for further details.
         setMax: function(maxIn) {
             // paper-slider needs a safety chek that the min value we are going to set is
             // not larger than the max value whic is already sey
-            if(this.min > maxIn) this.min = maxIn;
+            if(this.min > maxIn) {
+                this.min = maxIn;
+            }
 
             this.max = maxIn;
-            this._prevUpdateValues = [this.min, this.max]
+            this._prevUpdateValues = [this.min, this.max];
             return;
         },
         /**
@@ -652,7 +682,10 @@ See README.md for further details.
             return;
         },
 
+        _computeFocus: function(change) {
+            return change.base.minSlider || change.base.maxSlider;
+        },
+
       });
     </script>
 </dom-module>
-
