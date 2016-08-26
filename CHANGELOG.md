@@ -1,5 +1,9 @@
 # Changelog
 
+## paper-range-slider 0.1.3 (26/08/2016)
+
+- Added the `focused` property ('forwarded' from the `focused` properties of both sliders) and fixed some jshint warnings.
+
 ## paper-range-slider 0.1.2 (25/08/2016)
 
 - Changed the default values for `valueDiffMin` and `valueDiffMax` to 0 to prevent overlapping.
